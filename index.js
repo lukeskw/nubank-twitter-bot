@@ -14,17 +14,37 @@ const Bot = new twit({
 });
 
 exports.scheduledFunction = functions.pubsub.schedule('0 */12 * * *').timeZone('America/Sao_Paulo').onRun(() => {
-
+    //exports.tweet = functions.https.onRequest((request, resp) => {
     randomArray = ['Não.', 'Ainda não.', 'Não!', 'Negativo.', 'Aparentemente não.', 'Ao que tudo indica, não!', 'Nada confirmado.'];
 
-    const random = randomArray[Math.floor(Math.random() * randomArray.length)];
+    Bot.get('statuses/user_timeline', {}, (err, data, response) => {
+            if (err) {
+                functions.logger.log('O bot não conseguiu tweetar', err);
+            } else {
+                t = [];
+                for (let i = 0; i < 2; i++) {
+                    functions.logger.log(i)
+                    t.push(data[i].text)
+                }
+                randomArray = randomArray.filter(val => !t.includes(val));
+                const random = randomArray[Math.floor(Math.random() * randomArray.length)];
 
-    Bot.post('statuses/update', { status: random }, (err, data, response) => {
-        if (err) {
-            functions.logger.log('O bot não conseguiu tweetar', err);
-        } else {
-            functions.logger.log(response);
-        }
-    })
+                Bot.post('statuses/update', { status: random }, (err, data, response) => {
+                    if (err) {
+                        functions.logger.log('O bot não conseguiu tweetar', err);
+                    } else {
+                        functions.logger.log(response);
+                    }
+                })
+            }
+        })
+        // })
+        // Bot.post('statuses/update', { status: random }, (err, data, response) => {
+        //     if (err) {
+        //         functions.logger.log('O bot não conseguiu tweetar', err);
+        //     } else {
+        //         functions.logger.log(response);
+        //     }
+        // })
     return null;
 });
