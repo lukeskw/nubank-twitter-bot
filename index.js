@@ -25,7 +25,7 @@ const Bot = new twit({
 const randomArray = ['Não.', 'Ainda não.', 'Não!', 'Negativo.', 'Aparentemente não.', 'Ao que tudo indica, não!', 'Nada confirmado.'];
 
 //this function runs every 12h displaying a random phrase on the logged account timeline.
-exports.scheduledFunction = functions.pubsub.schedule('0 */12 * * *').timeZone('America/Sao_Paulo').onRun(() => {
+exports.scheduledFunction = functions.pubsub.schedule('0 12 * * *').timeZone('America/Sao_Paulo').onRun(() => {
     //exports.tweet = functions.https.onRequest((request, resp) => { //for testing purposes only
 
     Bot.get('statuses/user_timeline', {}, (err, data, response) => {
@@ -55,7 +55,7 @@ exports.scheduledFunction = functions.pubsub.schedule('0 */12 * * *').timeZone('
 });
 
 //this function runs every 2h, if last post date is greater than 3 days or if it's saved on the db, do nothing, else reply with a random phrase;
-exports.scheduledFunction2 = functions.pubsub.schedule('0 */3 * * *').timeZone('America/Sao_Paulo').onRun(async() => {
+exports.scheduledFunction2 = functions.pubsub.schedule('0 */2 * * *').timeZone('America/Sao_Paulo').onRun(async() => {
     //('0 */2 * * *') every 2h
     // exports.comment = functions.https.onRequest(async(request, resp) => { //for testing purposes only
 
